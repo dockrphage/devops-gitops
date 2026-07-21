@@ -1,0 +1,14 @@
+apiVersion: kustomize.toolkit.io/v1
+kind: Kustomization
+metadata:
+  name: devops-app-dev
+spec:
+  path: app/base/
+  patches:
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/image
+        value: dockrphage/devops-app:latest
+    target:
+      kind: Deployment
+      name: devops-app
