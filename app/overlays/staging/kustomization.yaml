@@ -1,44 +1,44 @@
 apiVersion: kustomize.toolkit.io/v1
 kind: Kustomization
 metadata:
-  name: devops-app-dev
+  name: devops-app-staging
 spec:
   path: app/base/
   patches:
   - patch: |-
       - op: replace
         path: /spec/replicas
-        value: 2
+        value: 3
       - op: replace
         path: /spec/template/spec/containers/0/image
         value: dockrphage/devops-app:latest
       - op: replace
         path: /spec/template/spec/containers/0/env/0/value
-        value: v1.0.0-dev
+        value: v1.0.0-staging
       - op: add
         path: /spec/template/spec/containers/0/env/-
         value:
           name: ENVIRONMENT
-          value: dev
+          value: staging
       - op: replace
         path: /spec/template/spec/containers/0/resources/requests/memory
-        value: "128Mi"
-      - op: replace
-        path: /spec/template/spec/containers/0/resources/requests/cpu
-        value: "100m"
-      - op: replace
-        path: /spec/template/spec/containers/0/resources/limits/memory
         value: "256Mi"
       - op: replace
-        path: /spec/template/spec/containers/0/resources/limits/cpu
+        path: /spec/template/spec/containers/0/resources/requests/cpu
         value: "200m"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: "512Mi"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/cpu
+        value: "500m"
     target:
       kind: Deployment
       name: devops-app
   - patch: |-
       - op: replace
         path: /spec/rules/0/host
-        value: devops-app-dev.local
+        value: devops-app-staging.local
     target:
       kind: Ingress
       name: devops-app-ingress
